@@ -1,0 +1,567 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище fahrutdinovaModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="manufactirer">
+          <Key>
+            <PropertyRef Name="manufacturerId" />
+          </Key>
+          <Property Name="manufacturerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="contact" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="order">
+          <Key>
+            <PropertyRef Name="idOrder" />
+          </Key>
+          <Property Name="idOrder" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="data" Type="date" Nullable="false" />
+          <Property Name="idProduct" Type="int" Nullable="false" />
+          <Property Name="status" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="idPunkt" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="orderProduct">
+          <Key>
+            <PropertyRef Name="idOrderProduct" />
+          </Key>
+          <Property Name="idOrderProduct" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idProduct" Type="int" Nullable="false" />
+          <Property Name="idOrder" Type="int" Nullable="false" />
+          <Property Name="count" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="idProduct" />
+          </Key>
+          <Property Name="idProduct" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tile" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="photo" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="manufacturerId" Type="int" Nullable="false" />
+          <Property Name="price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="discount" Type="int" />
+          <Property Name="count_in_store" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="punkt">
+          <Key>
+            <PropertyRef Name="idPunkt" />
+          </Key>
+          <Property Name="idPunkt" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="adress" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rolee">
+          <Key>
+            <PropertyRef Name="roleId" />
+          </Key>
+          <Property Name="roleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="roleName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="temp">
+          <Key>
+            <PropertyRef Name="iTemp" />
+          </Key>
+          <Property Name="iTemp" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idProduct" Type="int" Nullable="false" />
+          <Property Name="id_order_temp" Type="int" Nullable="false" />
+          <Property Name="count" Type="int" Nullable="false" />
+          <Property Name="idPunkt" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="roleId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_order_product">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="order" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="idProduct" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="idProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_punkt">
+          <End Role="punkt" Type="Self.punkt" Multiplicity="1" />
+          <End Role="order" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="punkt">
+              <PropertyRef Name="idPunkt" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="idPunkt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orderProduct_order">
+          <End Role="order" Type="Self.order" Multiplicity="1" />
+          <End Role="orderProduct" Type="Self.orderProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="order">
+              <PropertyRef Name="idOrder" />
+            </Principal>
+            <Dependent Role="orderProduct">
+              <PropertyRef Name="idOrder" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orderProduct_product">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="orderProduct" Type="Self.orderProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="idProduct" />
+            </Principal>
+            <Dependent Role="orderProduct">
+              <PropertyRef Name="idProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_manufactirer">
+          <End Role="manufactirer" Type="Self.manufactirer" Multiplicity="1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="manufactirer">
+              <PropertyRef Name="manufacturerId" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="manufacturerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rolee_user">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="Rolee" Type="Self.Rolee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="Rolee">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_temp_product">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="temp" Type="Self.temp" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="idProduct" />
+            </Principal>
+            <Dependent Role="temp">
+              <PropertyRef Name="idProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_Rolee">
+          <End Role="Rolee" Type="Self.Rolee" Multiplicity="1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rolee">
+              <PropertyRef Name="roleId" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="roleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище fahrutdinovaModelContainer">
+          <EntitySet Name="manufactirer" EntityType="Self.manufactirer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="order" EntityType="Self.order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="orderProduct" EntityType="Self.orderProduct" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="product" EntityType="Self.product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="punkt" EntityType="Self.punkt" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rolee" EntityType="Self.Rolee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="temp" EntityType="Self.temp" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_order_product" Association="Self.FK_order_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="order" EntitySet="order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_punkt" Association="Self.FK_order_punkt">
+            <End Role="punkt" EntitySet="punkt" />
+            <End Role="order" EntitySet="order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orderProduct_order" Association="Self.FK_orderProduct_order">
+            <End Role="order" EntitySet="order" />
+            <End Role="orderProduct" EntitySet="orderProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orderProduct_product" Association="Self.FK_orderProduct_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="orderProduct" EntitySet="orderProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_manufactirer" Association="Self.FK_product_manufactirer">
+            <End Role="manufactirer" EntitySet="manufactirer" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rolee_user" Association="Self.FK_Rolee_user">
+            <End Role="user" EntitySet="user" />
+            <End Role="Rolee" EntitySet="Rolee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_temp_product" Association="Self.FK_temp_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="temp" EntitySet="temp" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_Rolee" Association="Self.FK_user_Rolee">
+            <End Role="Rolee" EntitySet="Rolee" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="fahrutdinovaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="manufactirer">
+          <Key>
+            <PropertyRef Name="manufacturerId" />
+          </Key>
+          <Property Name="manufacturerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="contact" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="product" Relationship="Self.FK_product_manufactirer" FromRole="manufactirer" ToRole="product" />
+        </EntityType>
+        <EntityType Name="order">
+          <Key>
+            <PropertyRef Name="idOrder" />
+          </Key>
+          <Property Name="idOrder" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="data" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="idProduct" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="idPunkt" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="product" Relationship="Self.FK_order_product" FromRole="order" ToRole="product" />
+          <NavigationProperty Name="punkt" Relationship="Self.FK_order_punkt" FromRole="order" ToRole="punkt" />
+          <NavigationProperty Name="orderProduct" Relationship="Self.FK_orderProduct_order" FromRole="order" ToRole="orderProduct" />
+        </EntityType>
+        <EntityType Name="orderProduct">
+          <Key>
+            <PropertyRef Name="idOrderProduct" />
+          </Key>
+          <Property Name="idOrderProduct" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idProduct" Type="Int32" Nullable="false" />
+          <Property Name="idOrder" Type="Int32" Nullable="false" />
+          <Property Name="count" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="order" Relationship="Self.FK_orderProduct_order" FromRole="orderProduct" ToRole="order" />
+          <NavigationProperty Name="product" Relationship="Self.FK_orderProduct_product" FromRole="orderProduct" ToRole="product" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="idProduct" />
+          </Key>
+          <Property Name="idProduct" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tile" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="manufacturerId" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="discount" Type="Int32" />
+          <Property Name="count_in_store" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="manufactirer" Relationship="Self.FK_product_manufactirer" FromRole="product" ToRole="manufactirer" />
+          <NavigationProperty Name="order" Relationship="Self.FK_order_product" FromRole="product" ToRole="order" />
+          <NavigationProperty Name="orderProduct" Relationship="Self.FK_orderProduct_product" FromRole="product" ToRole="orderProduct" />
+          <NavigationProperty Name="temp" Relationship="Self.FK_temp_product" FromRole="product" ToRole="temp" />
+        </EntityType>
+        <EntityType Name="punkt">
+          <Key>
+            <PropertyRef Name="idPunkt" />
+          </Key>
+          <Property Name="idPunkt" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="adress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="order" Relationship="Self.FK_order_punkt" FromRole="punkt" ToRole="order" />
+        </EntityType>
+        <EntityType Name="Rolee">
+          <Key>
+            <PropertyRef Name="roleId" />
+          </Key>
+          <Property Name="roleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="roleName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="user" Relationship="Self.FK_Rolee_user" FromRole="Rolee" ToRole="user" />
+          <NavigationProperty Name="user1" Relationship="Self.FK_user_Rolee" FromRole="Rolee" ToRole="user" />
+        </EntityType>
+        <EntityType Name="temp">
+          <Key>
+            <PropertyRef Name="iTemp" />
+          </Key>
+          <Property Name="iTemp" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idProduct" Type="Int32" Nullable="false" />
+          <Property Name="id_order_temp" Type="Int32" Nullable="false" />
+          <Property Name="count" Type="Int32" Nullable="false" />
+          <Property Name="idPunkt" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="product" Relationship="Self.FK_temp_product" FromRole="temp" ToRole="product" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="roleId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Rolee" Relationship="Self.FK_Rolee_user" FromRole="user" ToRole="Rolee" />
+          <NavigationProperty Name="Rolee1" Relationship="Self.FK_user_Rolee" FromRole="user" ToRole="Rolee" />
+        </EntityType>
+        <Association Name="FK_product_manufactirer">
+          <End Role="manufactirer" Type="Self.manufactirer" Multiplicity="1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="manufactirer">
+              <PropertyRef Name="manufacturerId" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="manufacturerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_product">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="order" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="idProduct" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="idProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_punkt">
+          <End Role="punkt" Type="Self.punkt" Multiplicity="1" />
+          <End Role="order" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="punkt">
+              <PropertyRef Name="idPunkt" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="idPunkt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orderProduct_order">
+          <End Role="order" Type="Self.order" Multiplicity="1" />
+          <End Role="orderProduct" Type="Self.orderProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="order">
+              <PropertyRef Name="idOrder" />
+            </Principal>
+            <Dependent Role="orderProduct">
+              <PropertyRef Name="idOrder" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orderProduct_product">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="orderProduct" Type="Self.orderProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="idProduct" />
+            </Principal>
+            <Dependent Role="orderProduct">
+              <PropertyRef Name="idProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_temp_product">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="temp" Type="Self.temp" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="idProduct" />
+            </Principal>
+            <Dependent Role="temp">
+              <PropertyRef Name="idProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rolee_user">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="Rolee" Type="Self.Rolee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="Rolee">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_Rolee">
+          <End Role="Rolee" Type="Self.Rolee" Multiplicity="1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rolee">
+              <PropertyRef Name="roleId" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="roleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BoocClubEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="manufactirer" EntityType="Self.manufactirer" />
+          <EntitySet Name="order" EntityType="Self.order" />
+          <EntitySet Name="orderProduct" EntityType="Self.orderProduct" />
+          <EntitySet Name="product" EntityType="Self.product" />
+          <EntitySet Name="punkt" EntityType="Self.punkt" />
+          <EntitySet Name="Rolee" EntityType="Self.Rolee" />
+          <EntitySet Name="temp" EntityType="Self.temp" />
+          <EntitySet Name="user" EntityType="Self.user" />
+          <AssociationSet Name="FK_product_manufactirer" Association="Self.FK_product_manufactirer">
+            <End Role="manufactirer" EntitySet="manufactirer" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_product" Association="Self.FK_order_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="order" EntitySet="order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_punkt" Association="Self.FK_order_punkt">
+            <End Role="punkt" EntitySet="punkt" />
+            <End Role="order" EntitySet="order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orderProduct_order" Association="Self.FK_orderProduct_order">
+            <End Role="order" EntitySet="order" />
+            <End Role="orderProduct" EntitySet="orderProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orderProduct_product" Association="Self.FK_orderProduct_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="orderProduct" EntitySet="orderProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_temp_product" Association="Self.FK_temp_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="temp" EntitySet="temp" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rolee_user" Association="Self.FK_Rolee_user">
+            <End Role="user" EntitySet="user" />
+            <End Role="Rolee" EntitySet="Rolee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_Rolee" Association="Self.FK_user_Rolee">
+            <End Role="Rolee" EntitySet="Rolee" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище fahrutdinovaModelContainer" CdmEntityContainer="BoocClubEntities">
+          <EntitySetMapping Name="manufactirer">
+            <EntityTypeMapping TypeName="fahrutdinovaModel.manufactirer">
+              <MappingFragment StoreEntitySet="manufactirer">
+                <ScalarProperty Name="manufacturerId" ColumnName="manufacturerId" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="contact" ColumnName="contact" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="order">
+            <EntityTypeMapping TypeName="fahrutdinovaModel.order">
+              <MappingFragment StoreEntitySet="order">
+                <ScalarProperty Name="idOrder" ColumnName="idOrder" />
+                <ScalarProperty Name="data" ColumnName="data" />
+                <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="idPunkt" ColumnName="idPunkt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orderProduct">
+            <EntityTypeMapping TypeName="fahrutdinovaModel.orderProduct">
+              <MappingFragment StoreEntitySet="orderProduct">
+                <ScalarProperty Name="idOrderProduct" ColumnName="idOrderProduct" />
+                <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+                <ScalarProperty Name="idOrder" ColumnName="idOrder" />
+                <ScalarProperty Name="count" ColumnName="count" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="product">
+            <EntityTypeMapping TypeName="fahrutdinovaModel.product">
+              <MappingFragment StoreEntitySet="product">
+                <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+                <ScalarProperty Name="tile" ColumnName="tile" />
+                <ScalarProperty Name="photo" ColumnName="photo" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="manufacturerId" ColumnName="manufacturerId" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="discount" ColumnName="discount" />
+                <ScalarProperty Name="count_in_store" ColumnName="count_in_store" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="punkt">
+            <EntityTypeMapping TypeName="fahrutdinovaModel.punkt">
+              <MappingFragment StoreEntitySet="punkt">
+                <ScalarProperty Name="idPunkt" ColumnName="idPunkt" />
+                <ScalarProperty Name="adress" ColumnName="adress" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rolee">
+            <EntityTypeMapping TypeName="fahrutdinovaModel.Rolee">
+              <MappingFragment StoreEntitySet="Rolee">
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+                <ScalarProperty Name="roleName" ColumnName="roleName" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="temp">
+            <EntityTypeMapping TypeName="fahrutdinovaModel.temp">
+              <MappingFragment StoreEntitySet="temp">
+                <ScalarProperty Name="iTemp" ColumnName="iTemp" />
+                <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+                <ScalarProperty Name="id_order_temp" ColumnName="id_order_temp" />
+                <ScalarProperty Name="count" ColumnName="count" />
+                <ScalarProperty Name="idPunkt" ColumnName="idPunkt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user">
+            <EntityTypeMapping TypeName="fahrutdinovaModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
